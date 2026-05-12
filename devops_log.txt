@@ -1,0 +1,21 @@
+# DevOps Log & Tracking
+Project: URL Shortener
+
+## Step 1: Maven Setup
+- **Action**: Configured `pom.xml` as a proper Spring Boot project.
+- **Details**: Added `spring-boot-starter-parent` (v3.2.5), moved MongoDB, Redis, and Cache dependencies into the correct `<dependencies>` block, added `spring-boot-starter-web` and `spring-boot-starter-test`, and included the `spring-boot-maven-plugin`.
+- **Usage**: You can now build the project locally using `mvn clean install` or run it with `mvn spring-boot:run`.
+
+## Step 2: GitHub Actions CI/CD Pipeline
+- **Action**: Created a basic CI pipeline at `.github/workflows/maven.yml`.
+- **Details**: The pipeline triggers on pushes and pull requests to `main` and `master` branches. It sets up JDK 17, caches dependencies, and runs `mvn -B package`.
+- **Future Use**: Later, this pipeline can be extended to include steps for:
+  - Running unit and integration tests.
+  - Building and pushing a Docker image to Docker Hub or another container registry.
+  - Deploying the application to a cloud provider (like AWS, Azure, or Heroku).
+
+## Future DevOps Plans
+1. **Dockerization**: Create a `Dockerfile` and `docker-compose.yml` to containerize the application along with Redis and MongoDB.
+2. **Code Quality**: Integrate tools like SonarQube for static code analysis.
+3. **Continuous Deployment (CD)**: Automate the deployment process after a successful build.
+4. **Monitoring**: Add Prometheus/Grafana or similar tools for observability.
