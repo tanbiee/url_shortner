@@ -36,7 +36,7 @@ public class UrlController {
         return ResponseEntity.ok(Map.of("shortUrl", baseUrl + "/" + url.getShortCode()));
     }
 
-    @GetMapping("/{shortCode}")
+    @GetMapping("/{shortCode:[a-zA-Z0-9]+}")
     public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
         Optional<Url> urlOpt = urlService.getOriginalUrl(shortCode);
         if (urlOpt.isPresent()) {
