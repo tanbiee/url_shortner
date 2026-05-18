@@ -40,6 +40,15 @@ pipeline {
             }
         }
 
+        stage('Deploy Locally') {
+            steps {
+                // Stop any running containers from previous builds
+                bat 'docker-compose down'
+                // Start the new containers (app, mongodb, redis) on port 8081
+                bat 'docker-compose up -d'
+            }
+        }
+
         // --- OPTIONAL: Uncomment to push to Docker Hub ---
         // stage('Docker Push') {
         //     environment {
