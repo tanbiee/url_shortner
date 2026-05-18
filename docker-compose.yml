@@ -3,7 +3,7 @@ services:
     build: .
     image: url-shortener:local
     ports:
-      - "4041:4041"
+      - "4041:8081"
     environment:
       - MONGO_HOST=mongodb
       - REDIS_HOST=redis
