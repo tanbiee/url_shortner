@@ -27,12 +27,54 @@
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
             color: var(--text-main);
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
+        }
+
+        /* Navbar Styles */
+        nav {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 20;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #818cf8, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
         }
 
         /* Animated Background Elements */
@@ -42,20 +84,21 @@
             filter: blur(80px);
             opacity: 0.5;
             animation: float 10s infinite ease-in-out alternate;
+            z-index: 1;
         }
         .orb-1 {
             width: 300px;
             height: 300px;
             background: #6366f1;
-            top: -100px;
-            left: -100px;
+            top: 10%;
+            left: -50px;
         }
         .orb-2 {
             width: 400px;
             height: 400px;
             background: #ec4899;
-            bottom: -150px;
-            right: -100px;
+            bottom: 10%;
+            right: -50px;
             animation-delay: -5s;
         }
 
@@ -64,9 +107,18 @@
             100% { transform: translate(30px, 50px) scale(1.1); }
         }
 
+        /* Main Content Wrapper */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            z-index: 10;
+        }
+
         .container {
             position: relative;
-            z-index: 10;
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -75,7 +127,7 @@
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             text-align: center;
             transform: translateY(0);
             animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -90,9 +142,6 @@
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 10px;
-            background: linear-gradient(to right, #818cf8, #f472b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         p.subtitle {
@@ -227,33 +276,90 @@
             border-radius: 8px;
             display: none;
         }
+
+        /* Footer Styles */
+        footer {
+            width: 100%;
+            padding: 30px 40px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+            z-index: 20;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #818cf8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #f472b6;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#" class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: #818cf8;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            Nexus Links
+        </a>
+        <div class="nav-links">
+            <a href="#">Features</a>
+            <a href="#">API</a>
+            <a href="#">Enterprise</a>
+        </div>
+    </nav>
 
     <!-- Background effects -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
-    <div class="container">
-        <h1>Nexus Links</h1>
-        <p class="subtitle">Enterprise-grade URL shortening</p>
-        
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="Paste your long URL here..." required autocomplete="off">
+    <!-- Main Content Area -->
+    <main>
+        <div class="container">
+            <h1>Shorten Your Links</h1>
+            <p class="subtitle">Fast, secure, and reliable URL shortening infrastructure.</p>
+            
+            <div class="input-group">
+                <input type="text" id="urlInput" placeholder="Paste your long URL here..." required autocomplete="off">
+            </div>
+            
+            <button onclick="shorten()" id="shortenBtn">Generate Short Link</button>
+            
+            <div id="error" class="error"></div>
+            
+            <div id="result">
+                <div class="result-label">Success! Your link is ready:</div>
+                <a href="#" id="shortUrlLink" target="_blank"></a>
+                <br>
+                <button class="copy-btn" onclick="copyToClipboard()" id="copyBtn">Copy to Clipboard</button>
+            </div>
         </div>
-        
-        <button onclick="shorten()" id="shortenBtn">Generate Short Link</button>
-        
-        <div id="error" class="error"></div>
-        
-        <div id="result">
-            <div class="result-label">Success! Your link is ready:</div>
-            <a href="#" id="shortUrlLink" target="_blank"></a>
-            <br>
-            <button class="copy-btn" onclick="copyToClipboard()" id="copyBtn">Copy to Clipboard</button>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Nexus Infrastructure. Powered by Spring Boot & Docker.</p>
+        <div class="footer-links">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Contact Support</a>
         </div>
-    </div>
+    </footer>
 
     <script>
         let currentShortUrl = '';

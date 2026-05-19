@@ -3,146 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
+    <title>Nexus URL Shortener</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient-1: #0f172a;
+            --bg-gradient-2: #1e1b4b;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+            color: var(--text-main);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Navbar Styles */
+        nav {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 20;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #818cf8, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* Animated Background Elements */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 10s infinite ease-in-out alternate;
+            z-index: 1;
+        }
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: #6366f1;
+            top: 10%;
+            left: -50px;
+        }
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #ec4899;
+            bottom: 10%;
+            right: -50px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
+        }
+
+        /* Main Content Wrapper */
+        main {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #333;
+            padding: 40px 20px;
+            z-index: 10;
         }
+
         .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
+            position: relative;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 450px;
-            backdrop-filter: blur(10px);
+            max-width: 500px;
+            text-align: center;
+            transform: translateY(0);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         h1 {
-            margin-top: 0;
-            margin-bottom: 25px;
-            color: #2c3e50;
-            font-size: 28px;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
-        input[type="text"] {
-            width: calc(100% - 30px);
-            padding: 15px;
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .input-group {
+            position: relative;
             margin-bottom: 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
             font-size: 16px;
-            transition: border-color 0.3s;
+            font-family: inherit;
+            transition: all 0.3s ease;
             outline: none;
         }
+
         input[type="text"]:focus {
-            border-color: #3498db;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: rgba(0, 0, 0, 0.4);
         }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
         button {
-            background-color: #3498db;
+            width: 100%;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 12px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
-            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
         }
+
         button:hover {
-            background-color: #2980b9;
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.23);
         }
+
         button:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
+
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         #result {
             margin-top: 25px;
-            font-size: 18px;
-            word-wrap: break-word;
-            padding: 15px;
-            border-radius: 8px;
-            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             display: none;
-            border: 1px solid #e9ecef;
+            animation: fadeIn 0.5s ease;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: #a7f3d0;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
         #result a {
-            color: #3498db;
+            color: #34d399;
             text-decoration: none;
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
+            font-weight: 700;
             font-size: 20px;
+            word-break: break-all;
+            display: inline-block;
+            margin-bottom: 15px;
+            transition: color 0.2s;
         }
+
         #result a:hover {
-            text-decoration: underline;
+            color: #6ee7b7;
         }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #34d399;
+            color: #34d399;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            box-shadow: none;
+            width: auto;
+            display: inline-block;
+        }
+
+        .copy-btn:hover {
+            background: rgba(52, 211, 153, 0.1);
+            transform: none;
+            box-shadow: none;
+        }
+
         .error {
-            color: #e74c3c;
+            color: #ef4444;
             margin-top: 15px;
-            font-weight: 500;
+            font-size: 14px;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Footer Styles */
+        footer {
+            width: 100%;
+            padding: 30px 40px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+            z-index: 20;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #818cf8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #f472b6;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🚀 URL Shortener</h1>
-    <input type="text" id="urlInput" placeholder="Enter your long URL here..." required>
-    <button onclick="shorten()" id="shortenBtn">Shorten My URL</button>
-    <div id="error" class="error"></div>
-    <div id="result"></div>
-</div>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#" class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: #818cf8;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            Nexus Links
+        </a>
+        <div class="nav-links">
+            <a href="#">Features</a>
+            <a href="#">API</a>
+            <a href="#">Enterprise</a>
+        </div>
+    </nav>
 
-<script>
-    async function shorten() {
-        const input = document.getElementById('urlInput').value.trim();
-        const resultDiv = document.getElementById('result');
-        const errorDiv = document.getElementById('error');
-        const btn = document.getElementById('shortenBtn');
-        
-        resultDiv.style.display = 'none';
-        errorDiv.innerText = '';
-        
-        if (!input) {
-            errorDiv.innerText = 'Please enter a valid URL.';
-            return;
-        }
+    <!-- Background effects -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-        btn.innerText = 'Shortening...';
-        btn.disabled = true;
+    <!-- Main Content Area -->
+    <main>
+        <div class="container">
+            <h1>Shorten Your Links</h1>
+            <p class="subtitle">Fast, secure, and reliable URL shortening infrastructure.</p>
+            
+            <div class="input-group">
+                <input type="text" id="urlInput" placeholder="Paste your long URL here..." required autocomplete="off">
+            </div>
+            
+            <button onclick="shorten()" id="shortenBtn">Generate Short Link</button>
+            
+            <div id="error" class="error"></div>
+            
+            <div id="result">
+                <div class="result-label">Success! Your link is ready:</div>
+                <a href="#" id="shortUrlLink" target="_blank"></a>
+                <br>
+                <button class="copy-btn" onclick="copyToClipboard()" id="copyBtn">Copy to Clipboard</button>
+            </div>
+        </div>
+    </main>
 
-        try {
-            const response = await fetch('/api/shorten', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ originalUrl: input })
-            });
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Nexus Infrastructure. Powered by Spring Boot & Docker.</p>
+        <div class="footer-links">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Contact Support</a>
+        </div>
+    </footer>
 
-            if (response.ok) {
-                const data = await response.json();
-                resultDiv.innerHTML = `Your shortened URL:<br><a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
-                resultDiv.style.display = 'block';
-            } else {
-                const errorText = await response.text();
-                errorDiv.innerText = 'Error: ' + errorText;
+    <script>
+        let currentShortUrl = '';
+
+        async function shorten() {
+            const input = document.getElementById('urlInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+            const btn = document.getElementById('shortenBtn');
+            const linkElement = document.getElementById('shortUrlLink');
+            
+            resultDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            document.getElementById('copyBtn').innerText = 'Copy to Clipboard';
+            
+            if (!input) {
+                errorDiv.innerText = 'Please enter a valid URL.';
+                errorDiv.style.display = 'block';
+                return;
             }
-        } catch (error) {
-            errorDiv.innerText = 'Error connecting to the server.';
-        } finally {
-            btn.innerText = 'Shorten My URL';
-            btn.disabled = false;
+
+            btn.innerText = 'Processing...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/shorten', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ originalUrl: input })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentShortUrl = data.shortUrl;
+                    linkElement.href = currentShortUrl;
+                    linkElement.innerText = currentShortUrl;
+                    resultDiv.style.display = 'block';
+                } else {
+                    const errorText = await response.text();
+                    errorDiv.innerText = 'Error: ' + errorText;
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.innerText = 'Error connecting to the server.';
+                errorDiv.style.display = 'block';
+            } finally {
+                btn.innerText = 'Generate Short Link';
+                btn.disabled = false;
+            }
         }
-    }
-</script>
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(currentShortUrl).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.innerText = 'Copied! ✓';
+                setTimeout(() => {
+                    copyBtn.innerText = 'Copy to Clipboard';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
 
 </body>
 </html>
